@@ -1,0 +1,39 @@
+{
+  "accuracy": 85.26,
+  "precision": 89.34,
+  "recall": 85.26,
+  "f1_score": 86.87,
+  "cv_mean": 89.65,
+  "cv_std": 1.08,
+  "confusion_matrix": [
+    [
+      32,
+      4,
+      3
+    ],
+    [
+      10,
+      6,
+      11
+    ],
+    [
+      20,
+      31,
+      419
+    ]
+  ],
+  "labels": [
+    "negatif",
+    "netral",
+    "positif"
+  ],
+  "total_data": 2677,
+  "train_size": 2141,
+  "test_size": 536,
+  "vocab_size": 3501,
+  "distribution": {
+    "negatif": 196,
+    "netral": 135,
+    "positif": 2346
+  }
+}

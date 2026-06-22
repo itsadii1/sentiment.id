@@ -1,0 +1,1450 @@
+/* ============================================================
+   style.css – Shopee Sentiment Analyzer (Shopee Light Edition)
+   Tema: Light Clean × Shopee Orange Gradient — Modern & Smooth
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --orange: #ff4d2c; /* Shopee Orange */
+  --orange-gradient: linear-gradient(135deg, #ff4d2c 0%, #ff7337 100%);
+  --orange-glow: rgba(255, 77, 44, 0.45);
+  --orange-lt: #fff5f2;
+  --bg: #f8fafc;
+  --bg-white: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --text-sub: #94a3b8;
+  --border: #e2e8f0;
+  --green: #10b981;
+  --green-lt: #ecfdf5;
+  --red: #ef4444;
+  --red-lt: #fef2f2;
+  --amber: #f59e0b;
+  --amber-lt: #fffbeb;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --font: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "Space Grotesk", monospace;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text-main);
+  font-size: 15px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Background Soft Blur Orbs ala contoh gambar */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+
+  background:
+    radial-gradient(
+      circle at 75% 25%,
+      rgba(255, 87, 34, 0.22),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 85% 35%,
+      rgba(255, 140, 80, 0.18),
+      transparent 45%
+    ),
+    radial-gradient(circle at 15% 85%, rgba(255, 87, 34, 0.08), transparent 35%);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── HEADER ─────────────────────────────────────────────── */
+.site-header {
+  position: sticky;
+  top: 16px;
+  width: 95%;
+  margin: auto;
+
+  background: rgba(255, 255, 255, 0.75);
+
+  backdrop-filter: blur(20px);
+
+  border: 1px solid rgba(255, 255, 255, 0.6);
+
+  border-radius: 20px;
+
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+
+  z-index: 999;
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  flex-shrink: 0;
+  margin-right: 0;
+}
+.logo-icon {
+  font-size: 24px;
+}
+.logo-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+.logo-sub {
+  display: block;
+  font-size: 11px;
+  color: var(--text-sub);
+  font-weight: 600;
+}
+
+/* ============================================================
+   PERBAIKAN HEADER-NAV: SEJAJAR HORIZONTAL & DI SISI KANAN
+   ============================================================ */
+
+.header-inner {
+  gap: 48px !important;
+  padding: 12px 20px;
+}
+
+.header-nav {
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+/* Memastikan link di dalam nav memiliki ruang yang cukup */
+.nav-link {
+  display: inline-block;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--text-2);
+  white-space: nowrap; /* Mencegah teks menu patah menjadi dua baris */
+  transition: var(--transition);
+}
+
+/* Efek hover dengan warna gradasi mencolok */
+.nav-link:hover,
+.nav-link.active {
+  background: var(--orange-gradient);
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px var(--orange-glow);
+}
+.header-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--green-lt);
+  color: var(--green);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--green);
+  box-shadow: 0 0 8px var(--green);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 0.5;
+  }
+}
+
+/* ── HERO & LAYOUT SPLIT ────────────────────────────────── */
+.hero {
+  padding: 80px 0 40px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-label {
+  display: inline-flex;
+  background: rgba(255, 87, 34, 0.12);
+  color: var(--orange);
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 24px;
+}
+
+.hero-title {
+  font-size: 55px;
+  font-weight: 900;
+  line-height: 1.05;
+  margin-bottom: 24px;
+}
+
+.accent {
+  background: var(--orange-gradient);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.hero-desc {
+  font-size: 16px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+.hero-buttons {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 50px; /* tambah jarak ke bawah */
+}
+
+.btn-primary {
+  background: var(--orange-gradient);
+  color: white;
+  padding: 14px 28px;
+  border-radius: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(255, 77, 44, 0.3);
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 77, 44, 0.4);
+}
+
+.btn-secondary {
+  background: var(--bg-white);
+  color: var(--text-main);
+  border: 1px solid var(--border);
+  padding: 14px 28px;
+  border-radius: 30px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+}
+.btn-secondary:hover {
+  background: #f8fafc;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 25px; /* jarak dari tombol */
+}
+.tag {
+  background: var(--bg-white);
+  color: var(--text-muted);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+
+/* Kanan Hero: Interaktif Card Visualizer */
+.hero-visual-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.floating-preview-card {
+  position: relative;
+
+  padding: 35px;
+
+  border-radius: 30px;
+
+  background: rgba(255, 255, 255, 0.85);
+
+  backdrop-filter: blur(20px);
+
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+
+  overflow: hidden;
+  width: 100%;
+  max-width: 500px;
+}
+
+.preview-badge {
+  background: var(--green-lt);
+  color: var(--green);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 700;
+  display: inline-block;
+  margin-top: 16px;
+}
+
+/* ── STATS BAR ──────────────────────────────────────────── */
+.stats-bar {
+  padding: 24px 0 60px;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+.stat-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  transition: var(--transition);
+  text-align: left;
+}
+.stat-card:hover {
+  border-color: var(--orange);
+  transform: translateY(-2px);
+}
+.stat-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text-main);
+  font-family: var(--font-mono);
+}
+.stat-label {
+  font-size: 12px;
+  color: var(--text-sub);
+  font-weight: 600;
+}
+
+/* ── SECTIONS & CARDS ───────────────────────────────────── */
+.section {
+  padding: 80px 0;
+  background: var(--bg-white);
+  border-top: 1px solid var(--border);
+  padding: 100px 0;
+  background: transparent;
+}
+.section-alt {
+  background: var(--bg);
+}
+.section-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.section-header h2 {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+/* Analyzer Form */
+/* ==========================
+   ANALYZER CARD
+========================== */
+
+.analyzer-card {
+  background: #ffffff;
+  border: 1px solid rgba(255, 77, 44, 0.08);
+  border-radius: 24px;
+  padding: 36px;
+  box-shadow:
+    0 20px 40px rgba(15, 23, 42, 0.05),
+    0 4px 12px rgba(255, 77, 44, 0.04);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* ==========================
+   TEXTAREA
+========================== */
+
+.review-textarea {
+  width: 100%;
+  min-height: 180px;
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  border-radius: 18px;
+  font-family: var(--font);
+  font-size: 15px;
+  line-height: 1.7;
+  background: #f8fafc;
+  resize: vertical;
+  transition: all 0.3s ease;
+}
+
+.review-textarea:focus {
+  outline: none;
+  background: #ffffff;
+  border-color: #ff4d2c;
+  box-shadow: 0 0 0 5px rgba(255, 77, 44, 0.12);
+}
+
+/* ==========================
+   EXAMPLE BUTTONS
+========================== */
+
+.quick-examples {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.example-btn {
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.example-btn:hover {
+  background: #fff5f2;
+  border-color: #ff4d2c;
+  color: #ff4d2c;
+  transform: translateY(-2px);
+}
+/* ── ANALYZER CARD ICONS ────────────────────────────────── */
+.input-label {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.example-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.example-btn.pos:hover {
+  border-color: #10b981;
+  color: #10b981;
+  background: #ecfdf5;
+}
+.example-btn.neg:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: #fef2f2;
+}
+.example-btn.neu:hover {
+  border-color: #f59e0b;
+  color: #f59e0b;
+  background: #fffbeb;
+}
+
+.btn-analyze {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ==========================
+   BUTTON ANALYZE
+========================== */
+
+.btn-analyze {
+  width: 100%;
+  height: 58px;
+  background: linear-gradient(135deg, #ff4d2c 0%, #ff7337 100%);
+  color: white;
+  border: none;
+  border-radius: 18px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  box-shadow: 0 10px 25px rgba(255, 77, 44, 0.25);
+}
+
+.btn-analyze:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 35px rgba(255, 77, 44, 0.35);
+}
+
+.btn-analyze:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ==========================
+   RESULT CARD
+========================== */
+
+.result-card {
+  background: #ffffff;
+  border: 1px solid rgba(255, 77, 44, 0.08);
+  border-radius: 24px;
+  max-width: 720px;
+  margin: 24px auto 0;
+  overflow: hidden;
+
+  box-shadow:
+    0 20px 40px rgba(15, 23, 42, 0.05),
+    0 4px 12px rgba(255, 77, 44, 0.04);
+}
+
+/* ==========================
+   RESULT HEADER
+========================== */
+
+.result-header {
+  padding: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #edf2f7;
+}
+.result-emoji {
+  width: 90px;
+  height: 90px;
+  font-size: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+}
+
+.result-sentiment {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.result-sentiment.pos {
+  color: #10b981;
+}
+
+.result-sentiment.neg {
+  color: #ef4444;
+}
+
+.result-sentiment.neu {
+  color: #f59e0b;
+}
+/* ── RESULT CARD SVG ICONS ──────────────────────────────── */
+.result-label {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.conf-label {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: var(--text-sub);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+.proba-label {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 16px;
+}
+
+.clean-label {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 10px;
+}
+
+/* Spinner */
+.loading-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 32px;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border);
+  border-top-color: var(--orange);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================
+   PROBABILITY & CLEAN TEXT
+========================== */
+
+.proba-section,
+.clean-section {
+  padding: 28px;
+}
+
+.proba-section {
+  border-bottom: 1px solid #edf2f7;
+}
+
+.proba-track {
+  height: 10px;
+  background: #f1f5f9;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.proba-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+
+  background: linear-gradient(90deg, #ff4d2c, #ff7337);
+
+  transition: width 1s ease;
+}
+
+/* ==========================
+   PREPROCESSING BOX
+========================== */
+
+.clean-section {
+  background: #fafafa;
+}
+
+.clean-text {
+  margin-top: 12px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  color: #475569;
+  line-height: 1.7;
+}
+
+/* ==========================
+   MOBILE
+========================== */
+
+@media (max-width: 768px) {
+  .analyzer-card,
+  .result-card {
+    border-radius: 20px;
+  }
+
+  .result-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+}
+
+/* ===========================
+   NAIVE BAYES SECTION
+=========================== */
+
+.naive-section {
+  padding: 100px 0;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(255, 140, 0, 0.18),
+      transparent 40%
+    ),
+    linear-gradient(135deg, #fffaf5, #ffffff);
+}
+.naive-section .container {
+  max-width: 1400px;
+}
+
+.section-header {
+  text-align: center;
+  max-width: 800px;
+  margin: auto;
+  margin-bottom: 70px;
+}
+
+.section-badge {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 30px;
+  background: rgba(255, 140, 0, 0.12);
+  color: #ff7a00;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.section-header h2 {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+.section-header p {
+  color: #666;
+  line-height: 1.8;
+  font-size: 17px;
+}
+
+/* Grid */
+.naive-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 60px;
+}
+
+.naive-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 24px 18px;
+  min-height: 160px; /* lebih pendek */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  box-shadow: 0 10px 30px rgba(255, 115, 55, 0.08);
+  border: 1px solid rgba(255, 115, 55, 0.08);
+
+  transition: all 0.3s ease;
+}
+
+.naive-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(255, 115, 55, 0.15);
+}
+
+.naive-icon {
+  width: 60px;
+  height: 60px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+
+  border-radius: 16px;
+
+  background: linear-gradient(135deg, #ff6b35, #ff8c00);
+
+  color: white;
+
+  margin-bottom: 25px;
+
+  box-shadow: 0 10px 25px rgba(255, 107, 53, 0.3);
+}
+
+.naive-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #1e293b;
+}
+
+.naive-card p {
+  font-size: 12px;
+  line-height: 1.7;
+  color: #64748b;
+}
+/* Responsive */
+@media (max-width: 992px) {
+  .naive-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .section-header h2 {
+    font-size: 32px;
+  }
+
+  .naive-grid {
+    grid-template-columns: 1fr;
+  }
+}
+/* Visualization Cards */
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 24px;
+}
+.viz-card {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+}
+/* ── VIZ CARD TITLE ─────────────────────────────────────── */
+.viz-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 16px;
+}
+
+.viz-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--orange-lt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+/* Pipeline */
+/* ── PIPELINE: Cara Kerja Sistem ────────────────────────── */
+.pipeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+
+.pipe-step {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 28px 20px;
+  flex: 1;
+  min-width: 0;
+  max-width: 200px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: var(--transition);
+  position: relative;
+}
+
+.pipe-step:hover {
+  transform: translateY(-6px);
+  border-color: var(--orange);
+  box-shadow: 0 12px 32px rgba(255, 77, 44, 0.15);
+}
+
+.pipe-num {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--orange);
+  background: var(--orange-lt);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── PIPE ICON SVG ──────────────────────────────────────── */
+.pipe-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: var(--orange-lt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 12px;
+  transition: var(--transition);
+}
+
+.pipe-step:hover .pipe-icon {
+  background: var(--orange-gradient);
+}
+
+.pipe-step:hover .pipe-icon svg {
+  stroke: #ffffff;
+}
+
+.pipe-step h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+}
+
+.pipe-step p {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.pipe-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--orange);
+  font-size: 20px;
+  font-weight: 700;
+  padding: 0 6px;
+  flex-shrink: 0;
+  margin-bottom: 20px; /* supaya sejajar tengah card */
+}
+
+@media (max-width: 768px) {
+  .pipeline {
+    flex-direction: column;
+    align-items: center;
+  }
+  .pipe-step {
+    max-width: 100%;
+    width: 100%;
+  }
+  .pipe-arrow {
+    transform: rotate(90deg);
+    margin: 0;
+  }
+}
+
+/* Formula & Steps */
+/* ── FORMULA CARD ───────────────────────────────────────── */
+.formula-card {
+  background: linear-gradient(135deg, #fff5f2 0%, #ffffff 100%);
+  border: 1px solid rgba(255, 77, 44, 0.15);
+  border-radius: 24px;
+  padding: 48px 40px;
+  text-align: center;
+  margin-top: 48px;
+  box-shadow: 0 8px 32px rgba(255, 77, 44, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative orb */
+.formula-card::before {
+  content: "";
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(255, 77, 44, 0.1), transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.formula-card h3 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+}
+
+/* Rumus utama dengan fraksi */
+.formula {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--orange);
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.frac {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  vertical-align: middle;
+}
+
+.num {
+  border-bottom: 3px solid var(--orange);
+  padding: 0 8px 6px;
+  font-size: 22px;
+}
+
+.den {
+  padding: 6px 8px 0;
+  font-size: 22px;
+}
+
+/* Keterangan variabel */
+.formula-desc {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.fd-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 13.5px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  transition: var(--transition);
+}
+
+.fd-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: var(--orange-lt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.fd-item:hover {
+  border-color: var(--orange);
+  background: var(--orange-lt);
+}
+
+.fd-item:hover .fd-icon {
+  background: var(--orange-gradient);
+}
+
+.fd-item:hover .fd-icon svg {
+  stroke: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .formula-card {
+    padding: 32px 20px;
+  }
+  .formula {
+    font-size: 20px;
+  }
+  .num,
+  .den {
+    font-size: 16px;
+  }
+  .formula-desc {
+    grid-template-columns: 1fr;
+  }
+}
+.steps-list {
+  display: grid;
+  gap: 12px;
+}
+.step-item {
+  background: var(--bg-white);
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: var(--radius-md);
+  display: flex;
+  gap: 16px;
+}
+.step-badge {
+  background: var(--orange-lt);
+  color: var(--orange);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+/* ── FOOTER ─────────────────────────────────────────────── */
+.site-footer {
+  background: #0f172a;
+  border-top: none;
+  padding: 48px 0 24px;
+  color: #94a3b8;
+}
+
+.footer-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-brand .logo-title {
+  color: #ffffff;
+  font-size: 18px;
+}
+.footer-brand .logo-sub {
+  color: #64748b;
+  margin-top: 4px;
+}
+.footer-brand p {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 12px;
+  max-width: 280px;
+  line-height: 1.7;
+}
+
+.footer-links {
+  display: flex;
+  gap: 48px;
+}
+
+.footer-col h5 {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #ffffff;
+  margin-bottom: 16px;
+}
+.footer-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #94a3b8;
+  transition: var(--transition);
+}
+.footer-col ul li:hover .footer-icon {
+  background: rgba(255, 77, 44, 0.2);
+  border-color: rgba(255, 77, 44, 0.3);
+  color: #ff4d2c;
+}
+
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-col ul li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-col ul li span {
+  font-size: 15px;
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: #475569;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.footer-bottom-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.f-badge {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+@media (max-width: 768px) {
+  .footer-top {
+    flex-direction: column;
+  }
+  .footer-links {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+/* ── FOOTER OVERRIDE ────────────────────────────────────── */
+.site-footer {
+  background: #0f172a !important;
+  border-top: none !important;
+  padding: 48px 0 24px !important;
+  color: #94a3b8 !important;
+  font-size: 15px !important;
+}
+
+.footer-inner {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 32px !important;
+}
+/* ── LOGO PROFESIONAL ───────────────────────────────────── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--orange-gradient);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(255, 77, 44, 0.35);
+  flex-shrink: 0;
+}
+
+.logo-title {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.logo-sub {
+  display: block;
+  font-size: 11px;
+  color: var(--text-sub);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  margin-top: 1px;
+}
+
+/* ── ANIMATION STATES (JS Driven) ──────────────────────── */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+/* ── VISUALISASI: Layout & Cards ────────────────────────── */
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 kolom atas */
+  gap: 24px;
+}
+
+/* Card ke-4 (Kata Teratas) full width */
+.viz-card:nth-child(4) {
+  grid-column: 1 / -1;
+}
+
+/* Confusion Matrix Table */
+.cm-wrapper {
+  overflow-x: auto;
+  margin-top: 8px;
+}
+.cm-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.cm-table th,
+.cm-table td {
+  padding: 10px 16px;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.cm-table thead th {
+  background: var(--orange-lt);
+  color: var(--orange);
+  font-weight: 700;
+}
+.cm-table tbody th {
+  background: #f8fafc;
+  font-weight: 700;
+  text-align: left;
+}
+.cm-diag {
+  background: #ecfdf5;
+  color: #059669;
+  font-weight: 700;
+}
+.cm-off {
+  color: var(--text-muted);
+}
+
+/* Kata Teratas */
+.wc-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.wc-tab {
+  padding: 6px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--bg-white);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.wc-tab.active,
+.wc-tab:hover {
+  background: var(--orange-gradient);
+  color: #fff;
+  border-color: transparent;
+}
+.top-words-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  min-height: 80px;
+}
+.tw-chip {
+  background: var(--orange-lt);
+  color: var(--orange);
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: 600;
+  line-height: 1.4;
+  transition: var(--transition);
+}
+.tw-chip:hover {
+  background: var(--orange-gradient);
+  color: #fff;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .viz-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .viz-card:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 600px) {
+  .viz-grid {
+    grid-template-columns: 1fr;
+  }
+  .viz-card:nth-child(4) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+  }
+  .header-nav {
+    display: none;
+  }
+  .footer-inner {
+    flex-direction: column;
+    gap: 12px;
+  }
+}

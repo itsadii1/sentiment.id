@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Analisis Sentimen Ulasan Shopee – Naive Bayes</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <!-- ── HEADER ────────────────────────────────────────────── -->
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="logo" href="#">
+  <div class="logo-mark">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="3" fill="white"/>
+      <path d="M12 2v3M12 19v3M2 12h3M19 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div>
+    <span class="logo-title">Sentimen.id</span>
+    <span class="logo-sub">Naive Bayes · NLP Classifier</span>
+  </div>
+</a>
+        <nav class="header-nav">
+          <a href="#analisis" class="nav-link">Analisis</a>
+          <a href="#visual" class="nav-link">Visualisasi</a>
+          <a href="#cara-kerja" class="nav-link">Cara Kerja</a>
+        </nav>
+        <div class="header-badge">
+          <span class="badge-dot"></span>Model Aktif
+        </div>
+      </div>
+    </header>
+
+    <!-- ── HERO ──────────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <!-- KOLOM KIRI -->
+        <div class="hero-left reveal-init">
+          <div class="hero-label">⚡ Powered by / Naive Bayes</div>
+
+          <h1 class="hero-title">
+            Analisis Sentimen <br />
+            <span class="accent">Ulasan E-Commerce Shopee</span>
+          </h1>
+
+          <p class="hero-desc">
+            Klasifikasi otomatis ulasan produk menjadi Positif, Negatif, atau
+            Netral menggunakan algoritma Multinomial Naive Bayes dengan
+            preprocessing TF-IDF.
+          </p>
+
+         <div class="hero-buttons">
+  <a href="#analisis" class="btn-primary">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round">
+      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+      <path d="M11 8v6M8 11h6"/>
+    </svg>
+    <span>Analisis Sekarang</span>
+  </a>
+
+  <a href="#cara-kerja" class="btn-secondary">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <circle cx="12" cy="12" r="10"/>
+      <polygon points="10,8 16,12 10,16" fill="currentColor" stroke="none"/>
+    </svg>
+    <span>Cara Kerja</span>
+  </a>
+</div>
+          <div class="hero-tags">
+            <span class="tag">Python 3.x</span>
+            <span class="tag">Scikit-learn</span>
+            <span class="tag">Flask</span>
+            <span class="tag">TF-IDF</span>
+            <span class="tag">Naive Bayes</span>
+          </div>
+        </div>
+        <!-- TUTUP hero-left DI SINI -->
+
+        <!-- KOLOM KANAN -->
+        <div class="hero-visual-container reveal-init">
+          <div class="floating-preview-card" id="interactivePreview">
+            <p
+              id="previewText"
+              style="
+                font-style: italic;
+                color: var(--text-muted);
+                font-size: 16px;
+              "
+            >
+              "Barangnya bagus banget, pengiriman super cepat!"
+            </p>
+
+            <div class="preview-badge" id="previewBadge">
+              😊 Positive Sentiment
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-bar" id="evaluasi">
+      <div class="container stats-grid reveal-init">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-acc">{{ metrics.accuracy }}%</div>
+          <div class="stat-label">Akurasi Model</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-prec">{{ metrics.precision }}%</div>
+          <div class="stat-label">Response Time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-rec">{{ metrics.recall }}%</div>
+          <div class="stat-label">Recall Rate</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-f1">{{ metrics.f1_score }}%</div>
+          <div class="stat-label">F1-Score</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-data">{{ metrics.total_data }}</div>
+          <div class="stat-label">Total Dataset</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-vocab">3</div>
+          <div class="stat-label">Sentiment Classes</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section naive-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-badge">Machine Learning</span>
+          <h2>Apa Itu Naive Bayes?</h2>
+          <p>
+            Naive Bayes merupakan algoritma klasifikasi yang menggunakan Teorema
+            Bayes untuk menentukan probabilitas suatu data termasuk ke dalam
+            kelas tertentu. Algoritma ini terkenal cepat, ringan, dan sangat
+            efektif untuk analisis sentimen teks.
+          </p>
+        </div>
+
+        <div class="naive-grid">
+          <div class="naive-card">
+            <div class="naive-icon">
+              <i class="fas fa-book"></i>
+            </div>
+            <h3>Teorema Bayes</h3>
+            <p>
+              Menghitung probabilitas suatu kelas berdasarkan fitur-fitur yang
+              dimiliki data.
+            </p>
+          </div>
+
+          <div class="naive-card">
+            <div class="naive-icon">
+              <i class="fas fa-bolt"></i>
+            </div>
+            <h3>Cepat Diproses</h3>
+            <p>
+              Cocok digunakan untuk ribuan hingga jutaan data ulasan dengan
+              waktu pelatihan singkat.
+            </p>
+          </div>
+
+          <div class="naive-card">
+            <div class="naive-icon">
+              <i class="fas fa-bullseye"></i>
+            </div>
+            <h3>Akurat</h3>
+            <p>
+              Sangat populer untuk klasifikasi teks seperti spam detection dan
+              analisis sentimen.
+            </p>
+          </div>
+
+          <div class="naive-card">
+            <div class="naive-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3>Machine Learning</h3>
+            <p>
+              Model belajar dari data latih untuk memprediksi sentimen ulasan
+              baru.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ── ANALISIS SENTIMEN ──────────────────────────────────── -->
+    <section class="section" id="analisis">
+      <div class="container">
+        <div class="section-header">
+          <h2>Analisis Sentimen</h2>
+          <p>
+            Masukkan ulasan produk Shopee, sistem akan mengklasifikasikan
+            sentimennya secara otomatis.
+          </p>
+        </div>
+
+        <div class="analyzer-card">
+  <div class="analyzer-top">
+    <label class="input-label">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:6px;">
+        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Teks Ulasan Produk
+    </label>
+    <span class="char-count" id="charCount">0 karakter</span>
+  </div>
+
+  <textarea
+    id="reviewInput"
+    class="review-textarea"
+    placeholder="Contoh: Barang datang cepat, kualitas bagus sesuai foto, packing aman, penjual ramah. Sangat puas dan akan beli lagi!"
+    maxlength="1000"
+    rows="5"
+  ></textarea>
+
+  <div class="quick-examples">
+    <span class="examples-label">Contoh cepat:</span>
+    <button class="example-btn pos" onclick="fillExample('positif')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;">
+        <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2"/>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="9" cy="10" r="1.5" fill="#10b981"/>
+        <circle cx="15" cy="10" r="1.5" fill="#10b981"/>
+      </svg>
+      Positif
+    </button>
+    <button class="example-btn neg" onclick="fillExample('negatif')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;">
+        <circle cx="12" cy="12" r="10" stroke="#ef4444" stroke-width="2"/>
+        <path d="M8 16s1.5-2 4-2 4 2 4 2" stroke="#ef4444" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="9" cy="10" r="1.5" fill="#ef4444"/>
+        <circle cx="15" cy="10" r="1.5" fill="#ef4444"/>
+      </svg>
+      Negatif
+    </button>
+    <button class="example-btn neu" onclick="fillExample('netral')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;">
+        <circle cx="12" cy="12" r="10" stroke="#f59e0b" stroke-width="2"/>
+        <path d="M8 15h8" stroke="#f59e0b" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="9" cy="10" r="1.5" fill="#f59e0b"/>
+        <circle cx="15" cy="10" r="1.5" fill="#f59e0b"/>
+      </svg>
+      Netral
+    </button>
+  </div>
+
+  <button class="btn-analyze" id="btnAnalyze" onclick="analyze()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align:middle;margin-right:8px;">
+      <circle cx="11" cy="11" r="8" stroke="white" stroke-width="2"/>
+      <path d="M21 21l-4.35-4.35" stroke="white" stroke-width="2" stroke-linecap="round"/>
+      <path d="M8 11h6M11 8v6" stroke="white" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    Analisis Sentimen
+  </button>
+</div>
+
+        <!-- Hasil Prediksi -->
+        <!-- Hasil Prediksi -->
+<div class="result-card" id="resultCard" style="display: none">
+  <div class="result-header" id="resultHeader">
+    <div class="result-emoji" id="resultEmoji">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="12" cy="12" r="10" stroke="#10b981" stroke-width="2"/>
+        <path d="M8 14s1.5 2 4 2 4-2 4-2" stroke="#10b981" stroke-width="2" stroke-linecap="round"/>
+        <circle cx="9" cy="10" r="1.5" fill="#10b981"/>
+        <circle cx="15" cy="10" r="1.5" fill="#10b981"/>
+      </svg>
+    </div>
+    <div class="result-info">
+      <div class="result-label">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:5px;">
+          <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        Hasil Prediksi
+      </div>
+      <div class="result-sentiment" id="resultSentiment">POSITIF</div>
+    </div>
+    <div class="result-conf">
+      <div class="conf-value" id="confValue">0%</div>
+      <div class="conf-label">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:4px;">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>
+        Confidence
+      </div>
+    </div>
+  </div>
+
+  <!-- Probabilitas tiap kelas -->
+  <div class="proba-section">
+    <div class="proba-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px;">
+        <rect x="3" y="10" width="4" height="11" rx="1" stroke="#ff4d2c" stroke-width="2"/>
+        <rect x="10" y="6" width="4" height="15" rx="1" stroke="#ff4d2c" stroke-width="2"/>
+        <rect x="17" y="3" width="4" height="18" rx="1" stroke="#ff4d2c" stroke-width="2"/>
+      </svg>
+      Distribusi Probabilitas Kelas
+    </div>
+    <div class="proba-bars" id="probaBars"></div>
+  </div>
+
+  <!-- Teks yang diproses -->
+  <div class="clean-section">
+    <div class="clean-label">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" style="vertical-align:middle;margin-right:6px;">
+        <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z" stroke="#64748b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Teks setelah preprocessing
+    </div>
+    <div class="clean-text" id="cleanText"></div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading-card" id="loadingCard" style="display: none">
+  <div class="spinner"></div>
+  <span>Memproses ulasan...</span>
+</div>
+        </div>
+
+        <!-- Loading -->
+        <div class="loading-card" id="loadingCard" style="display: none">
+          <div class="spinner"></div>
+          <span>Memproses ulasan...</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── VISUALISASI ────────────────────────────────────────── -->
+    <section class="section section-alt" id="visual">
+      <div class="container">
+        <div class="section-header">
+          <h2>Visualisasi Data & Model</h2>
+          <p>Distribusi data latih, confusion matrix, dan cross-validation.</p>
+        </div>
+
+        <div class="viz-grid">
+  <!-- Distribusi Dataset -->
+  <div class="viz-card">
+    <h3 class="viz-title">
+      <span class="viz-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round">
+          <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/>
+          <path d="M22 12A10 10 0 0 0 12 2v10z"/>
+        </svg>
+      </span>
+      Distribusi Dataset
+    </h3>
+    <canvas id="distChart" height="240"></canvas>
+  </div>
+
+  <!-- Confusion Matrix -->
+  <div class="viz-card">
+    <h3 class="viz-title">
+      <span class="viz-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round">
+          <rect x="3" y="3" width="7" height="7" rx="1"/>
+          <rect x="14" y="3" width="7" height="7" rx="1"/>
+          <rect x="3" y="14" width="7" height="7" rx="1"/>
+          <rect x="14" y="14" width="7" height="7" rx="1"/>
+        </svg>
+      </span>
+      Confusion Matrix
+    </h3>
+    <div class="cm-wrapper" id="cmWrapper"></div>
+  </div>
+
+  <!-- Metrik Evaluasi -->
+  <div class="viz-card">
+    <h3 class="viz-title">
+      <span class="viz-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+          <line x1="2" y1="20" x2="22" y2="20"/>
+        </svg>
+      </span>
+      Metrik Evaluasi
+    </h3>
+    <canvas id="metricChart" height="240"></canvas>
+  </div>
+
+  <!-- Kata Teratas -->
+  <div class="viz-card">
+    <h3 class="viz-title">
+      <span class="viz-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round">
+          <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          <line x1="8" y1="10" x2="16" y2="10"/>
+          <line x1="8" y1="14" x2="12" y2="14"/>
+        </svg>
+      </span>
+      Kata Teratas per Sentimen
+    </h3>
+    <div class="wc-tabs">
+      <button class="wc-tab active" onclick="loadTopWords('positif', this)">Positif</button>
+      <button class="wc-tab" onclick="loadTopWords('negatif', this)">Negatif</button>
+      <button class="wc-tab" onclick="loadTopWords('netral', this)">Netral</button>
+    </div>
+    <div id="topWordsContainer" class="top-words-grid"></div>
+  </div>
+</div>
+      </div>
+    </section>
+
+    <!-- ── CARA KERJA ─────────────────────────────────────────── -->
+    <section class="section" id="cara-kerja">
+      <div class="container">
+        <div class="section-header">
+          <h2>Cara Kerja Sistem</h2>
+          <p>Pipeline lengkap dari input teks hingga prediksi sentimen.</p>
+        </div>
+
+       <div class="pipeline">
+  <div class="pipe-step">
+    <div class="pipe-num">1</div>
+    <div class="pipe-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+        <line x1="8" y1="10" x2="16" y2="10"/>
+        <line x1="8" y1="14" x2="12" y2="14"/>
+      </svg>
+    </div>
+    <h4>Input Teks</h4>
+    <p>Ulasan produk dimasukkan pengguna atau dimuat dari dataset Kaggle CSV.</p>
+  </div>
+
+  <div class="pipe-arrow">→</div>
+
+  <div class="pipe-step">
+    <div class="pipe-num">2</div>
+    <div class="pipe-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.07 4.93l-1.41 1.41M6.34 17.66l-1.41 1.41M2 12h2M20 12h2M17.66 17.66l1.41 1.41M4.93 4.93l1.41 1.41M12 2v2M12 20v2"/>
+      </svg>
+    </div>
+    <h4>Preprocessing</h4>
+    <p>Lowercase, hapus URL/simbol, tokenisasi, hapus stopwords, stemming.</p>
+  </div>
+
+  <div class="pipe-arrow">→</div>
+
+  <div class="pipe-step">
+    <div class="pipe-num">3</div>
+    <div class="pipe-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="3" width="20" height="18" rx="2"/>
+        <line x1="2" y1="9" x2="22" y2="9"/>
+        <line x1="8" y1="9" x2="8" y2="21"/>
+        <line x1="14" y1="9" x2="14" y2="21"/>
+      </svg>
+    </div>
+    <h4>TF-IDF Vectorizer</h4>
+    <p>Teks diubah ke vektor numerik bobot TF-IDF (1-gram & 2-gram, 10K fitur).</p>
+  </div>
+
+  <div class="pipe-arrow">→</div>
+
+  <div class="pipe-step">
+    <div class="pipe-num">4</div>
+    <div class="pipe-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="17" x2="12.01" y2="17"/>
+      </svg>
+    </div>
+    <h4>Naive Bayes</h4>
+    <p>Multinomial NB menghitung P(kelas | fitur) menggunakan Teorema Bayes.</p>
+  </div>
+
+  <div class="pipe-arrow">→</div>
+
+  <div class="pipe-step">
+    <div class="pipe-num">5</div>
+    <div class="pipe-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+    </div>
+    <h4>Prediksi</h4>
+    <p>Kelas dengan probabilitas tertinggi dipilih sebagai hasil sentimen.</p>
+  </div>
+</div>
+
+        <!-- Rumus Naive Bayes -->
+        <div class="formula-card">
+  <h3>
+    <span class="viz-icon" style="display:inline-flex;vertical-align:middle;margin-right:10px;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="19" y1="5" x2="5" y2="19"/>
+        <circle cx="6.5" cy="6.5" r="2.5"/>
+        <circle cx="17.5" cy="17.5" r="2.5"/>
+      </svg>
+    </span>
+    Rumus Teorema Bayes
+  </h3>
+  <div class="formula">
+    P(C | X) =
+    <span class="frac">
+      <span class="num">P(X | C) × P(C)</span>
+      <span class="den">P(X)</span>
+    </span>
+  </div>
+  <div class="formula-desc">
+    <div class="fd-item">
+      <div class="fd-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </div>
+      <div><strong>P(C|X)</strong> – Probabilitas sentimen C diberikan teks X (posterior)</div>
+    </div>
+    <div class="fd-item">
+      <div class="fd-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round">
+          <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/>
+        </svg>
+      </div>
+      <div><strong>P(X|C)</strong> – Likelihood: probabilitas teks X jika kelas adalah C</div>
+    </div>
+    <div class="fd-item">
+      <div class="fd-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+      </div>
+      <div><strong>P(C)</strong> – Prior: probabilitas kelas C dalam data latih</div>
+    </div>
+    <div class="fd-item">
+      <div class="fd-icon">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4d2c" stroke-width="2" stroke-linecap="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+      </div>
+      <div><strong>P(X)</strong> – Evidence: konstanta normalisasi (diabaikan saat prediksi)</div>
+    </div>
+  </div>
+</div>
+    </section>
+
+    <!-- ── FOOTER ─────────────────────────────────────────────── -->
+    <footer class="site-footer">
+  <div class="container footer-inner">
+
+    <div class="footer-top">
+      <!-- Brand -->
+      <div class="footer-brand">
+            <span class="logo-title">Shopee Sentiment</span>
+            <span class="logo-sub">Analisis Ulasan Berbasis AI</span>
+          </span>
+        </a>
+        <p>Sistem klasifikasi sentimen ulasan produk Shopee menggunakan algoritma Naive Bayes dengan akurasi tinggi.</p>
+      </div>
+
+      <!-- Links -->
+      <div class="footer-links">
+  <div class="footer-col">
+    <h5>Teknologi</h5>
+    <ul>
+      <li>
+        <span class="footer-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+        </span>
+        Python 3
+      </li>
+      <li>
+        <span class="footer-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/>
+          </svg>
+        </span>
+        Flask Framework
+      </li>
+      <li>
+        <span class="footer-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/>
+          </svg>
+        </span>
+        scikit-learn
+      </li>
+      <li>
+        <span class="footer-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="18" y1="20" x2="18" y2="10"/>
+            <line x1="12" y1="20" x2="12" y2="4"/>
+            <line x1="6" y1="20" x2="6" y2="14"/>
+            <line x1="2" y1="20" x2="22" y2="20"/>
+          </svg>
+        </span>
+        Chart.js
+      </li>
+    </ul>
+  </div>
+
+  <div class="footer-col">
+    <h5>Model</h5>
+    <ul>
+      <li>
+        <span class="footer-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+            <circle cx="12" cy="12" r="10"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </span>
+        Multinomial Naive Bayes
+      </li>
+      <li>
+        <span class="footer-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <rect x="2" y="3" width="20" height="18" rx="2"/>
+            <line x1="2" y1="9" x2="22" y2="9"/>
+            <line x1="8" y1="9" x2="8" y2="21"/>
+            <line x1="14" y1="9" x2="14" y2="21"/>
+          </svg>
+        </span>
+        TF-IDF Vectorizer
+      </li>
+      <li>
+        <span class="footer-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <ellipse cx="12" cy="5" rx="9" ry="3"/>
+            <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+            <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+          </svg>
+        </span>
+        Dataset Kaggle
+      </li>
+      <li>
+        <span class="footer-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+        </span>
+        3 Kelas Sentimen
+      </li>
+    </ul>
+  </div>
+</div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+      <span>© 2025 Analisis Sentimen Ulasan Shopee · Tugas Akhir</span>
+      <div class="footer-bottom-badges">
+        <span class="f-badge">Python + Flask</span>
+        <span class="f-badge">Naive Bayes</span>
+        <span class="f-badge">TF-IDF</span>
+      </div>
+    </div>
+
+  </div>
+</footer>
+
+    <script src="{{ url_for('static', filename='js/chart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script>
+      window.METRICS = {{ metrics | tojson }};
+    </script>
+  </body>
+</html>
